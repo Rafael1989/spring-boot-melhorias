@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "pessoa")
@@ -33,8 +34,9 @@ public class Pessoa {
 	@NotNull
 	private Boolean ativo;
 	
+	@JsonIgnoreProperties("pessoa") // para não dar problema de recursividade pois ele lê os atributos de pessoa quando chega em contato vai ler os de contato, e volta para pessoa e depois volta para contato e depois volta para pessoa, looping infinito
 	@Valid
-	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Contato> contatos;
 
 	public Long getCodigo() {
@@ -73,6 +75,14 @@ public class Pessoa {
 	@Transient
 	public boolean isInativo() {
 		return !this.ativo;
+	}
+	
+	public List<Contato> getContatos() {
+		return contatos;
+	}
+	
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
 	}
 
 	@Override

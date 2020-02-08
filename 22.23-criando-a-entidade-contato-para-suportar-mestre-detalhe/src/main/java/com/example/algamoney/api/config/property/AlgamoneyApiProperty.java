@@ -9,7 +9,13 @@ public class AlgamoneyApiProperty {
 
 	private final Seguranca seguranca = new Seguranca();
 	
+	private final S3 s3 = new S3();
+	
 	private final Mail mail = new Mail();
+	
+	public S3 getS3() {
+		return s3;
+	}
 	
 	public Mail getMail() {
 		return mail;
@@ -38,6 +44,40 @@ public class AlgamoneyApiProperty {
 		public void setEnableHttps(boolean enableHttps) {
 			this.enableHttps = enableHttps;
 		}
+	}
+	
+	public static class S3 {
+		private String accessKeyId;
+		
+		private String secretAccessKey;
+		
+		private String bucket = "aw-algamoney-arquivos"; //é nome unico na amazon diretorio raiz onde guarda arquivos
+		
+		public String getBucket() {
+			return bucket;
+		}
+		
+		public void setBucket(String bucket) {
+			this.bucket = bucket;
+		}
+
+		public String getAccessKeyId() {
+			return accessKeyId;
+		}
+
+		public void setAccessKeyId(String accessKeyId) {
+			this.accessKeyId = accessKeyId;
+		}
+
+		public String getSecretAccessKey() {
+			return secretAccessKey;
+		}
+
+		public void setSecretAccessKey(String secretAccessKey) {
+			this.secretAccessKey = secretAccessKey;
+		}
+		
+		
 	}
 
 	public static class Mail {
