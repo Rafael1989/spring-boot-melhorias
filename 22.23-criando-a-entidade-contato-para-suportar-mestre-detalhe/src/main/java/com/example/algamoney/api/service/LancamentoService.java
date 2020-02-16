@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import com.example.algamoney.api.repository.PessoaRepository;
 import com.example.algamoney.api.repository.UsuarioRepository;
 import com.example.algamoney.api.service.exception.PessoaInexistenteOuInativaException;
 import com.example.algamoney.api.storage.S3;
+
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -133,7 +135,7 @@ public class LancamentoService {
 	private void validarPessoa(Lancamento lancamento) {
 		Pessoa pessoa = null;
 		if (lancamento.getPessoa().getCodigo() != null) {
-			pessoa = pessoaRepository.findOne(lancamento.getPessoa().getCodigo());
+			pessoa = pessoaRepository.getOne(lancamento.getPessoa().getCodigo());
 		}
 
 		if (pessoa == null || pessoa.isInativo()) {
@@ -142,11 +144,11 @@ public class LancamentoService {
 	}
 
 	private Lancamento buscarLancamentoExistente(Long codigo) {
-		Lancamento lancamentoSalvo = lancamentoRepository.findOne(codigo);
-		if (lancamentoSalvo == null) {
+		Optional<Lancamento> lancamentoSalvo = lancamentoRepository.findById(codigo);
+		if (!lancamentoSalvo.isPresent()) {
 			throw new IllegalArgumentException();
 		}
-		return lancamentoSalvo;
+		return lancamentoSalvo.get();
 	}
 
 }
